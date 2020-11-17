@@ -7,6 +7,7 @@ log=$HOME/log/installedlist.log
 if [[ ! $BACKUP_DIR ]]; then
     echo -e "env not set yet, exit..." >>$log 2>&1
     exit 1
+    echo "----------" >> $log 2>&1
 fi
 cd $BACKUP_DIR
 comm -23 <(pacman -Qeq | sort) <(pacman -Qmq | sort) >pkglist
@@ -18,5 +19,7 @@ then
     echo "Nothing new today..." >> $log 2>&1
 else
     git diff >> $log 2>&1
+    echo -e "-----\nstart to push" >> $log 2>&1
+    git add * && git commit -m "packages list update..." && git push -u origin master >> $log 2>&1
 fi
 echo "----------" >> $log 2>&1
